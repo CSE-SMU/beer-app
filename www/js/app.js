@@ -43,11 +43,23 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   })
 
   .state('app.beers', {
-    url: '/beers',
+    url: '/beers?name',
     views: {
       'menuContent': {
         templateUrl: 'templates/beers.html',
         controller: 'BeersCtrl'
+      }
+    },
+    resolve: {
+      beers: function($stateParams, $http) {
+        return $http({
+          method: 'GET',
+          url: 'https://salty-taiga-88147.herokuapp.com/search',
+          params: {
+            q: $stateParams.name,
+            type: 'beer'
+          }
+        })
       }
     }
   })
@@ -58,6 +70,14 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       'menuContent': {
         templateUrl: 'templates/beer.html',
         controller: 'BeerCtrl'
+      }
+    },
+    resolve: {
+      beer: function($stateParams, $http) {
+        return $http({
+          method: 'GET',
+          url: 'https://salty-taiga-88147.herokuapp.com/beer/'+$stateParams.id
+        })
       }
     }
   });
